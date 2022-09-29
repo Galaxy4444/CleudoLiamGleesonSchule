@@ -90,35 +90,18 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public String homeForm() {
-
-        return "index";
-    }
-
-    @GetMapping("/people")
-    public String loadPeople(Model model) {
+    public String homeForm(Model model) {
         deletePeople(dataService.getPeople());
         setupPeople(dataService.getPeople());
         model.addAttribute("people", dataService.getPeople());
-
-        return "people";
-    }
-
-    @GetMapping("/weapons")
-    public String loadWeapons(Model model) {
         deleteWeons(dataService.getWepons());
         setupWeapons(dataService.getWepons());
         model.addAttribute("weapons", dataService.getWepons());
-
-        return "weapons";
-    }
-
-    @GetMapping("/rooms")
-    public String loadRooms(Model model) {
         deleteRooms(dataService.getRooms());
         setupRooms(dataService.getRooms());
         model.addAttribute("rooms", dataService.getRooms());
 
-        return "rooms";
+        return "index";
     }
+    
 }

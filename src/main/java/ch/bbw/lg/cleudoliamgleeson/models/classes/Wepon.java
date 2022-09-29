@@ -1,6 +1,8 @@
 package ch.bbw.lg.cleudoliamgleeson.models.classes;
 
 
+import java.util.ArrayList;
+
 public class Wepon {
     private String name;
     private String typ;
@@ -20,6 +22,8 @@ public class Wepon {
         person.setDead(true);
         return person.getName() + "Died";
     }
+
+    
 
     public String benutzt(Person person){
         person.setDead(true);
