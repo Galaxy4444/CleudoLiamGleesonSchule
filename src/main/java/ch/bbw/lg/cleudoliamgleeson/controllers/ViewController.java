@@ -1,20 +1,24 @@
 package ch.bbw.lg.cleudoliamgleeson.controllers;
 
 import ch.bbw.lg.cleudoliamgleeson.models.DataService;
+import ch.bbw.lg.cleudoliamgleeson.models.classes.Crime;
 import ch.bbw.lg.cleudoliamgleeson.models.classes.Person;
 import ch.bbw.lg.cleudoliamgleeson.models.classes.Room;
+import ch.bbw.lg.cleudoliamgleeson.logic.GameLogic;
 import ch.bbw.lg.cleudoliamgleeson.models.classes.Wepon;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
 
 @Controller
 public class ViewController {
     Boolean isLoaded = false;
     DataService dataService = new DataService();
+    GameLogic gameLogic = new GameLogic();
 
     Person chad = new Person("Chad", "giga", 24, "Musklen", "chad", false);
     Person soyBoy = new Person("Jeffery", "Mr", 44, "Glatze", "Detailhandel", false);
@@ -91,6 +95,7 @@ public class ViewController {
 
     @GetMapping("/")
     public String homeForm(Model model) {
+
         deletePeople(dataService.getPeople());
         setupPeople(dataService.getPeople());
         model.addAttribute("people", dataService.getPeople());
@@ -101,7 +106,25 @@ public class ViewController {
         setupRooms(dataService.getRooms());
         model.addAttribute("rooms", dataService.getRooms());
 
+
+
         return "index";
+    }
+
+    @PostMapping("/submit")
+    public String CheckCrime(@RequestParam Person person, @RequestParam Room room, @ RequestParam Wepon wepon){
+        Crime crime = new Crime();
+        int MaxSuggestion = 5;
+        int currenSuggestion = 0;
+        Crime playersCrime = new Crime();
+
+        playersCrime.setActor(dataService.findPersonIndexByName(dataService.getPeople(), person.getName()));
+        playersCrime.setWeapon(dataService.findWeaponIndexByName(dataService.getWepons(), wepon.getName()));
+        playersCrime.setScene(dataService.findRoomIndexByName(dataService.getRooms(), room.getName()));
+        gameLogic.setupNewGame(dataService, crime);
+        gameLogic.evaluateSuggestion(playersCrime, crime, currenSuggestion, MaxSuggestion);
+        return "";
+
     }
     
 }
